@@ -63,10 +63,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 	var mInverse:Bool;
 	var mIterator:PriorityQueueIterator<T>;
 	
-	#if (debug && flash)
-	var mMap:HashMap<T, Bool>;
-	#end
-	
 	/**
 		@param inverse if true, the lower the number, the higher the priority.
 		By default a higher number means a higher priority.
@@ -99,10 +95,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 		
 		set(0, cast null);
 		mSize = 0;
-		
-		#if (debug && flash)
-		mMap = new HashMap<T, Bool>();
-		#end
 		
 		key = HashKey.next();
 		reuseIterator = false;
@@ -206,11 +198,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 		assert(x != null, "element is null");
 		#end
 		
-		#if (debug && flash)
-		assert(!mMap.hasKey(x), "element already exists");
-		mMap.set(x, true);
-		#end
-		
 		set(++mSize, x);
 		x.position = mSize;
 		upheap(mSize);
@@ -230,10 +217,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 		set(1, get(mSize));
 		downheap(1);
 		
-		#if (debug && flash)
-		mMap.clr(x);
-		#end
-		
 		mSize--;
 		return x;
 	}
@@ -248,10 +231,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 	public function reprioritize(x:T, priority:Float)
 	{
 		assert(size() > 0, "priority queue is empty");
-		
-		#if (debug && flash)
-		assert(mMap.hasKey(x), "unknown element");
-		#end
 		
 		var oldPriority = x.priority;
 		if (oldPriority != priority)
@@ -358,13 +337,8 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 			mIterator.free();
 			mIterator = null;
 		}
-		
-		#if (debug && flash)
-		mMap.free();
-		mMap = null;
-		#end
 	}
-	
+
 	/**
 		Returns true if this priority queue contains the element `x`.
 		<o>1</o>
@@ -392,11 +366,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 		{
 			assert(x != null, "x is null");
 			
-			#if (debug && flash)
-			assert(mMap.hasKey(x), "x does not exist");
-			mMap.clr(x);
-			#end
-			
 			if (x.position == 1)
 				dequeue();
 			else
@@ -422,10 +391,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 		{
 			for (i in 1...mData.length) set(i, cast null);
 		}
-		
-		#if (debug && flash)
-		mMap.clear(true);
-		#end
 		
 		mSize = 0;
 	}
@@ -506,10 +471,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 			for (i in 1...mSize + 1)
 			{
 				copy.set(i, get(i));
-				
-				#if (debug && flash)
-				copy.mMap.set(get(i), true);
-				#end
 			}
 		}
 		else
@@ -525,10 +486,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 				c.position = e.position;
 				c.priority = e.priority;
 				copy.set(i, untyped c);
-				
-				#if (debug && flash)
-				copy.mMap.set(untyped c, true);
-				#end
 			}
 		}
 		else
@@ -540,10 +497,6 @@ class PriorityQueue<T:(Prioritizable)> implements Queue<T>
 				c.position = e.position;
 				c.priority = e.priority;
 				copy.set(i, c);
-				
-				#if (debug && flash)
-				copy.mMap.set(e, true);
-				#end
 			}
 		}
 		
